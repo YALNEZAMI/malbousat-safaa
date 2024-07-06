@@ -50,7 +50,9 @@
     <div class="relative text-center text-2xl font-semibold my-2 underline">
       {{ product.name }}
       <div class="absolute right-2 top-0 underline">
-        <span class="text-sm text-gray-400">{{ store.formatDate(date) }}</span>
+        <span class="text-gray-400" style="font-size: x-small">{{
+          store.formatDate(date)
+        }}</span>
       </div>
     </div>
     <hr />
