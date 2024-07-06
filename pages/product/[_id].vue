@@ -47,8 +47,10 @@
     </div>
     <hr />
     <!--name-->
-    <div class="relative text-center text-2xl font-semibold my-2 underline">
-      {{ product.name }}
+    <div
+      class="relative flex justify-center text-2xl font-semibold my-2 underline"
+    >
+      <span class="truncate w-1/2"> {{ product.name }} </span>
       <div class="absolute right-2 top-0 underline">
         <span class="text-gray-400" style="font-size: x-small">{{
           store.formatDate(date)
@@ -128,7 +130,9 @@
     <!--price-->
     <div class="my-2 flex flex-row-reverse justify-center px-2">
       <span class="mx-5">السعر</span>
-      <span class="mx-5">{{ product.price + "ل.س" }}</span>
+      <div class="flex flex-row-reverse justify-center">
+        <span class="mx-1">{{ getPrice() }}</span> <span>ل.س</span>
+      </div>
     </div>
     <hr class="my-3" />
 
@@ -184,4 +188,11 @@ onMounted(async () => {
     product.value = store.getProductById(route.query._id as string);
   }
 });
+const getPrice = () => {
+  if (product.value.price > product.value.sold) {
+    return product.value.sold;
+  } else {
+    product.value.price;
+  }
+};
 </script>
