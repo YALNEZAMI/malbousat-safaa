@@ -62,12 +62,13 @@ const suggestions = ref([]);
 const emit = defineEmits(["search"]);
 
 watch(key, (newVal) => {
-  if (newVal) {
+  if (newVal != "") {
     suggestions.value = store.products
       .filter((p) => p.name.includes(newVal))
       .map((p) => p.name);
   } else {
     suggestions.value = [];
+    search(newVal);
   }
 });
 
