@@ -1,6 +1,6 @@
 <template>
-  <main class="fixed top-28 right-0 w-full p-2 bg-white">
-    <div class="relative w-full flex flex-row-reverse">
+  <div class="relative">
+    <div class="flex flex-row-reverse">
       <div class="mx-3">
         <button
           @click="search(key)"
@@ -50,8 +50,9 @@
         </div>
       </div>
     </div>
-  </main>
+  </div>
 </template>
+
 <script setup>
 import { useStore } from "~/store/store";
 

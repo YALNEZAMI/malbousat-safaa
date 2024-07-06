@@ -1,5 +1,5 @@
 <template>
-  <main class="pt-12">
+  <main class="pt-12 relative">
     <search-bar @search="handleSearch" />
     <div id="container" class="flex flex-wrap flex-row p-2">
       <product
@@ -43,7 +43,6 @@ const mounted = ref(false);
 onMounted(async () => {
   //init products
   if (store.products.length == 0) {
-    // const prods = await store.getProducts();
     const productsCall: any = await $fetch("/api/products", {
       method: "GET",
     });
