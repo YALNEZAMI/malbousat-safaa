@@ -56,7 +56,8 @@
     <hr />
     <!--description-->
     <p
-      class="my-2 max-h-10 overflow-hidden"
+      dir="rtl"
+      class="my-2 max- h-10 overflow-hidden"
       :class="{
         'max-h-max overflow-auto': allDescription,
       }"
