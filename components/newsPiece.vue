@@ -45,7 +45,7 @@ const deleteNewsPiece = async () => {
       password: store.admin.password,
     },
   });
-  if (deletingCall.sucess) {
+  if (deletingCall.success) {
     emit("deleted", newsPiece._id);
   }
 };
