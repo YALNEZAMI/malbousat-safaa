@@ -12,6 +12,7 @@
       <div class="relative">
         <input
           @blur="handleBlure"
+          @focus="handleFocus"
           class="p-1 mx-2 border-black border-2 text-center rounded"
           v-model.trim="key"
           type="text"
@@ -34,16 +35,14 @@
         <!--suggestions-->
         <div
           id="suggestions"
-          class="absolute right-2 top-10 bg-gray-600 w-48 max-h-20 overflow-y-auto rounded text-white"
-          :class="{
-            ' p-2': suggestions.length != 0,
-          }"
+          class="absolute right-2 z-50 top-10 bg-gray-600 w-48 max-h-20 overflow-y-auto rounded text-white"
+          v-if="suggestions.length > 0"
         >
           <div
             @click="selectSuggestion(sug)"
             v-for="(sug, index) of suggestions"
             :key="index"
-            class="hover:opacity-80 text-center my-1"
+            class="hover:opacity-80 cursor-pointer text-center my-1"
           >
             {{ sug }}
             <hr />
@@ -60,30 +59,40 @@ const store = useStore();
 const key = ref("");
 const suggestions = ref([]);
 const emit = defineEmits(["search"]);
-watch(key, (n, o) => {
-  suggestions.value = store.products.map((p) => {
-    if (p.name.includes(n)) {
-      return p.name;
-    } else {
-      return "";
-    }
-  });
-  suggestions.value = suggestions.value.filter((s) => {
-    return s != "";
-  });
+
+watch(key, (newVal) => {
+  if (newVal) {
+    suggestions.value = store.products
+      .filter((p) => p.name.includes(newVal))
+      .map((p) => p.name);
+  } else {
+    suggestions.value = [];
+  }
 });
-onMounted(() => {});
+
 const selectSuggestion = (sug) => {
   key.value = sug;
   setTimeout(() => {
     suggestions.value = [];
   }, 50);
-  search(sug);
+  search(key.value);
 };
+
 const search = (n) => {
   emit("search", n);
 };
+
 const handleBlure = () => {
-  suggestions.value = [];
+  setTimeout(() => {
+    suggestions.value = [];
+  }, 200); // Delay to allow click event to register
+};
+
+const handleFocus = () => {
+  if (key.value) {
+    suggestions.value = store.products
+      .filter((p) => p.name.includes(key.value))
+      .map((p) => p.name);
+  }
 };
 </script>
