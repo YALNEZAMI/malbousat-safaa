@@ -1,5 +1,5 @@
 <template>
-  <main class="bg-black w-full h-10 py-2 flex justify-center flex-row-reverse">
+  <main class="bg-black w-full h-11 py-2 flex justify-center flex-row-reverse">
     <NuxtLink
       class="text-red-500 mx-3"
       :class="{
