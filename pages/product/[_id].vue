@@ -1,7 +1,10 @@
 <template>
   <main>
     <!--images-->
-    <div class="flex justify-center">
+    <div class="flex justify-center relative">
+      <div class="absolute top-0 right-2">
+        {{ indexPhoto + 1 + "/" + product.photos.length }}
+      </div>
       <div class="flex justify-center items-center">
         <svg
           @click="last"
@@ -44,8 +47,11 @@
     </div>
     <hr />
     <!--name-->
-    <div class="text-center text-2xl font-semibold my-2 underline">
+    <div class="relative text-center text-2xl font-semibold my-2 underline">
       {{ product.name }}
+      <div class="absolute right-2 top-0 underline">
+        <span class="text-sm text-gray-400">{{ store.formatDate(date) }}</span>
+      </div>
     </div>
     <hr />
     <!--description-->
@@ -58,7 +64,10 @@
       {{ product.description }}
     </p>
     <!--switch desc length-->
-    <div class="flex justify-center text-blue-500">
+    <div
+      v-if="product.description.length > 77"
+      class="flex justify-center text-blue-500"
+    >
       <span @click="allDescription = !allDescription" class="cursor-pointer">
         <!--hide desc-->
         <svg
@@ -99,24 +108,29 @@
         </svg>
       </span>
     </div>
+    <hr class="my-3" />
     <!--rest size-->
-    <div class="my-2 flex flex-row-reverse justify-between px-2">
-      <span>مقاسات متوفرة</span>
-      <span>
-        <select class="p-2">
+    <div class="my-2 flex flex-row-reverse justify-center px-2">
+      <span class="mx-5 pt-1">مقاسات متوفرة</span>
+      <span class="mx-5">
+        <select class="p-1 border-2">
           <option v-for="(size, index) of product.sizes" :key="index" value="">
             {{ size }}
           </option>
         </select>
       </span>
     </div>
+    <hr class="my-3" />
+
     <!--price-->
-    <div class="my-2 flex flex-row-reverse justify-between px-2">
-      <span>السعر</span>
-      <span>{{ product.price }}</span>
+    <div class="my-2 flex flex-row-reverse justify-center px-2">
+      <span class="mx-5">السعر</span>
+      <span class="mx-5">{{ product.price + "ل.س" }}</span>
     </div>
+    <hr class="my-3" />
+
     <!--return button-->
-    <div class="flex justify-center">
+    <div class="flex justify-center mb-3">
       <button
         @click="back"
         class="bg-orange-500 hover:opacity-90 w-max rounded p-2"
@@ -135,11 +149,9 @@ const route = useRoute();
 const router = useRouter();
 const indexPhoto = ref(0);
 const allDescription = ref(false);
-const product: Ref<Product> = ref(
-  store.products.find((p: Product) => {
-    return p.id == route.params.id;
-  })
-);
+const prodStore = store.getProductById(route.params._id as string);
+const product: Ref<Product> = ref(prodStore);
+const date = ref(new Date(product.value.update_date));
 const last = () => {
   if (indexPhoto.value == 0) {
     indexPhoto.value = product.value.photos.length - 1;
@@ -157,4 +169,16 @@ const next = () => {
 const back = () => {
   router.back();
 };
+onMounted(async () => {
+  //init products
+  if (store.products.length == 0) {
+    // const prods = await store.getProducts();
+    const productsCall: any = await $fetch("/api/products", {
+      method: "GET",
+    });
+
+    store.setProducts(productsCall.products);
+    product.value = store.getProductById(route.query._id as string);
+  }
+});
 </script>
