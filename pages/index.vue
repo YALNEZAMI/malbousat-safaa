@@ -48,6 +48,9 @@ onMounted(async () => {
     });
 
     products.value = productsCall.products;
+    products.value = products.value.concat(
+      products.value.concat(products.value)
+    );
     store.setProducts(productsCall.products);
   }
   mounted.value = true;

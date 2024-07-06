@@ -1,5 +1,5 @@
 <template>
-  <div class="relative">
+  <div class="fixed top-32 right-1 z-40">
     <div class="flex flex-row-reverse">
       <div class="mx-3">
         <button
